@@ -1,0 +1,35 @@
+version: '3.9'
+
+networks:
+  waka-time:
+
+services:
+  wakapi:
+    image: n1try/wakapi:latest
+    ports:
+      - '3001:3001'
+    environment:
+      WAKAPI_PASSWORD_SALT: 'NvzLnS9B7yNXRqpR5gxfhuqJjkDxDjXRp82XX997Ly'
+      WAKAPI_PORT: '3001'
+      WAKAPI_EXPOSE_METRICS: true
+    networks:
+      - waka-time
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./dashboards:/etc/dashboards
+      - ./provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    networks:
+      - waka-time
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - waka-time

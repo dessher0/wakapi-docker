@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 60s
+  evaluation_interval: 60s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: grafana
+    static_configs:
+      - targets: ['localhost:3000']
+  - job_name: 'wakapi'
+    scrape_interval: 1m
+    metrics_path: '/api/metrics'
+    bearer_token: 'Y2Y3MTlhMDItNTEyNC00OGJmLWE3YTItMTRhMDQwZTU5YjM4Cg=='
+    static_configs:
+      - targets: ['localhost:3001']
